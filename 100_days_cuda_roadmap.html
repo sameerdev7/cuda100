@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>100 Days of CUDA — Roadmap</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a0f;
+    --bg2: #111118;
+    --bg3: #1a1a24;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.14);
+    --text: #e8e6f0;
+    --muted: #7a7890;
+    --dim: #4a4860;
+    --accent: #7c6af0;
+    --accent2: #4eedb8;
+    --accent3: #f06a6a;
+    --accent4: #f0b94a;
+    --accent5: #6ab4f0;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  header {
+    max-width: 900px;
+    margin: 0 auto 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .header-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent2);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  h1 {
+    font-family: var(--mono);
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin-bottom: 0.75rem;
+  }
+
+  h1 span { color: var(--accent); }
+
+  .header-sub {
+    color: var(--muted);
+    font-size: 13px;
+    max-width: 560px;
+  }
+
+  .gpu-spec {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent4);
+    background: rgba(240,185,74,0.08);
+    border: 1px solid rgba(240,185,74,0.2);
+    border-radius: 4px;
+    padding: 3px 8px;
+    margin-top: 1rem;
+  }
+
+  .legend {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin: 0 auto 2rem;
+    max-width: 900px;
+  }
+
+  .tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 3px;
+    letter-spacing: 0.05em;
+  }
+
+  .tag-kernel  { background: rgba(107,180,240,0.12); color: var(--accent5); border: 1px solid rgba(107,180,240,0.25); }
+  .tag-project { background: rgba(78,237,184,0.10); color: var(--accent2); border: 1px solid rgba(78,237,184,0.22); }
+  .tag-theory  { background: rgba(124,106,240,0.12); color: #a99df5; border: 1px solid rgba(124,106,240,0.25); }
+  .tag-optim   { background: rgba(240,185,74,0.10); color: var(--accent4); border: 1px solid rgba(240,185,74,0.22); }
+  .tag-ship    { background: rgba(240,106,106,0.10); color: var(--accent3); border: 1px solid rgba(240,106,106,0.22); }
+
+  .phase {
+    max-width: 900px;
+    margin: 0 auto 2rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--bg2);
+  }
+
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.85rem 1.1rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg3);
+  }
+
+  .phase-badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 3px;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+  }
+
+  .p1 .phase-badge { background: rgba(107,180,240,0.15); color: var(--accent5); border: 1px solid rgba(107,180,240,0.3); }
+  .p2 .phase-badge { background: rgba(78,237,184,0.12); color: var(--accent2); border: 1px solid rgba(78,237,184,0.28); }
+  .p3 .phase-badge { background: rgba(124,106,240,0.14); color: #a99df5; border: 1px solid rgba(124,106,240,0.3); }
+  .p4 .phase-badge { background: rgba(240,185,74,0.12); color: var(--accent4); border: 1px solid rgba(240,185,74,0.28); }
+  .p5 .phase-badge { background: rgba(240,106,106,0.12); color: var(--accent3); border: 1px solid rgba(240,106,106,0.28); }
+
+  .phase-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .phase-days {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--dim);
+    margin-left: auto;
+  }
+
+  .days-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(268px, 1fr));
+  }
+
+  .day-card {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    cursor: default;
+    transition: background 0.12s;
+  }
+
+  .day-card:hover { background: rgba(255,255,255,0.025); }
+
+  .day-num {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--dim);
+    margin-bottom: 3px;
+    letter-spacing: 0.05em;
+  }
+
+  .day-title {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 4px;
+    line-height: 1.35;
+  }
+
+  .day-sub {
+    font-size: 11.5px;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-bottom: 6px;
+  }
+
+  .tags { display: flex; gap: 4px; flex-wrap: wrap; }
+
+  .milestone {
+    max-width: 900px;
+    margin: 0 auto 2rem;
+    background: rgba(240,185,74,0.05);
+    border: 1px solid rgba(240,185,74,0.18);
+    border-left: 3px solid var(--accent4);
+    border-radius: 0 8px 8px 0;
+    padding: 0.75rem 1rem;
+    font-size: 12.5px;
+    color: var(--muted);
+    font-family: var(--mono);
+  }
+
+  .milestone strong {
+    color: var(--accent4);
+    font-weight: 600;
+    display: block;
+    margin-bottom: 2px;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-tag">// 100 days of CUDA</div>
+  <h1>GPU Programming<br><span>Roadmap</span></h1>
+  <p class="header-sub">C/C++ + LLM knowledge → GPU/ML infra engineer. 3 shipped projects, 2 blog posts, benchmarks with numbers.</p>
+  <div class="gpu-spec">▸ GTX 1650 · CUDA 12.6 · local dev + Colab for scale</div>
+</header>
+
+<div class="legend">
+  <span class="tag tag-kernel">kernel</span>
+  <span class="tag tag-project">project</span>
+  <span class="tag tag-theory">theory</span>
+  <span class="tag tag-optim">optimize</span>
+  <span class="tag tag-ship">ship it</span>
+</div>
+
+<!-- Phase 1 -->
+<div class="phase p1">
+  <div class="phase-header">
+    <span class="phase-badge">Phase 1</span>
+    <span class="phase-title">CUDA foundations — from C to GPU</span>
+    <span class="phase-days">Days 1–20</span>
+  </div>
+  <div class="days-grid">
+    <div class="day-card"><div class="day-num">Day 1</div><div class="day-title">Hello GPU — environment + first kernel</div><div class="day-sub">Setup CUDA locally. vecAdd. cudaMalloc, cudaMemcpy, cudaFree. Grid/block/thread hierarchy.</div><div class="tags"><span class="tag tag-kernel">kernel</span><span class="tag tag-theory">theory</span></div></div>
+    <div class="day-card"><div class="day-num">Day 2</div><div class="day-title">2D indexing — matrix add</div><div class="day-sub">threadIdx, blockIdx in 2D. Understand why you care about index math.</div><div class="tags"><span class="tag tag-kernel">kernel</span></div></div>
+    <div class="day-card"><div class="day-num">Day 3</div><div class="day-title">MatVec multiply + shared memory intro</div><div class="day-sub">Dot products in parallel. First use of __shared__. PMPP Ch 3.</div><div class="tags"><span class="tag tag-kernel">kernel</span><span class="tag tag-theory">theory</span></div></div>
+    <div class="day-card"><div class="day-num">Day 4</div><div class="day-title">Parallel reduction — partial sum</div><div class="day-sub">Tree-based reduction. Warp divergence. The mental model for every future kernel.</div><div class="tags"><span class="tag tag-kernel">kernel</span><span class="tag tag-theory">theory</span></div></div>
+    <div class="day-card"><div class="day-num">Day 5</div><div class="day-title">Memory hierarchy — the mental model</div><div class="day-sub">Global vs shared vs registers. Latency numbers. PMPP Ch 4. First Nsight session.</div><div class="tags"><span class="tag tag-theory">theory</span></div></div>
+    <div class="day-card"><div class="day-num">Day 6</div><div class="day-title">Coalescing — matrix transpose</div><div class="day-sub">Bank conflicts. Transpose naive vs shared-mem. PMPP Ch 5.</div><div class="tags"><span class="tag tag-kernel">kernel</span><span class="tag tag-optim">optimize</span></div></div>
+    <div class="day-card"><div class="day-num">Day 7</div><div class="day-title">Convolution — 1D and 2D with tiling</div><div class="day-sub">Halo cells. Tile loading. Constant memory for kernels. PMPP Ch 7.</div><div class="tags"><span class="tag tag-kernel">kernel</span></div></div>
+    <div class="day-card"><div class="day-num">Day 8</div><div class="day-title">Prefix scan — Brent-Kung</div><div class="day-sub">Up-sweep / down-sweep. Why prefix scan matters for RNNs.</div><div class="tags"><span class="tag tag-kernel">kernel</span><span class="tag tag-theory">theory</span></div></div>
+    <div class="day-card"><div class="day-num">Day 9</div><div class="day-title">Naive GEMM — your baseline</div><div class="day-sub">Write the dumbest possible matmul. Profile it. Know exactly where cycles go.</div><div class="tags"><span class="tag tag-kernel">kernel</span><span class="tag tag-optim">optimize</span></div></div>
+    <div class="day-card"><div class="day-num">Day 10</div><div class="day-title">Tiled GEMM — shared memory</div><div class="day-sub">16×16 tiles. Measure GFLOPS/s. Compare to naive. Most important kernel you'll write.</div><div class="tags"><span class="tag tag-kernel">kernel</span><span class="tag tag-optim">optimize</span></div></div>
+    <div class="day-card"><div class="day-num">Day 11</div><div class="day-title">GEMM — register tiling + unrolling</div><div class="day-sub">Thread coarsening. #pragma unroll. Track each optimization's % gain in your README.</div><div class="tags"><span class="tag tag-optim">optimize</span></div></div>
+    <div class="day-card"><div class="day-num">Day 12</div><div class="day-title">LayerNorm kernel</div><div class="day-sub">Two-pass reduction for mean + variance. Welford's online algorithm for stability.</div><div class="tags"><span class="tag tag-kernel">kernel</span></div></div>
+    <div class="day-card"><div class="day-num">Day 13</div><div class="day-title">Softmax kernel — numerically stable</div><div class="day-sub">Max reduction then exp then sum. Building block for attention.</div><div class="tags"><span class="tag tag-kernel">kernel</span></div></div>
+    <div class="day-card"><div class="day-num">Day 14</div><div class="day-title">RMSNorm + kernel fusion intro</div><div class="day-sub">RMSNorm is in every modern LLM. Fusion = fewer global memory round-trips.</div><div class="tags"><span class="tag tag-kernel">kernel</span><span class="tag tag-theory">theory</span></div></div>
+    <div class="day-card"><div class="day-num">Day 15</div><div class="day-title">Naive attention — understand the wall</div><div class="day-sub">QKV matmuls + softmax. Profile memory bandwidth. See why Flash Attention was needed.</div><div class="tags"><span class="tag tag-kernel">kernel</span><span class="tag tag-theory">theory</span></div></div>
+    <div class="day-card"><div class="day-num">Days 16–17</div><div class="day-title">Flash Attention v1 forward pass</div><div class="day-sub">Tiled attention with online softmax. The algorithm that changed inference. 2 days, go deep.</div><div class="tags"><span class="tag tag-kernel">kernel</span><span class="tag tag-theory">theory</span></div></div>
+    <div class="day-card"><div class="day-num">Day 18</div><div class="day-title">Warp primitives — __shfl_sync</div><div class="day-sub">Warp reduce, warp scan without shared memory. Faster than you think.</div><div class="tags"><span class="tag tag-kernel">kernel</span><span class="tag tag-optim">optimize</span></div></div>
+    <div class="day-card"><div class="day-num">Days 19–20</div><div class="day-title">README catchup + Project 1 kickoff</div><div class="day-sub">Write up everything. Post publicly. Start Project 1: minRNN in CUDA.</div><div class="tags"><span class="tag tag-ship">ship it</span><span class="tag tag-project">project</span></div></div>
+  </div>
+</div>
+
+<div class="milestone"><strong>Milestone 1 — Day 20</strong>Publish your GitHub repo. GEMM, softmax, LayerNorm, naive attention, Flash Attention fwd all benchmarked. First README live.</div>
+
+<!-- Phase 2 -->
+<div class="phase p2">
+  <div class="phase-header">
+    <span class="phase-badge">Phase 2</span>
+    <span class="phase-title">Project 1 — minRNN in CUDA</span>
+    <span class="phase-days">Days 21–40</span>
+  </div>
+  <div class="days-grid">
+    <div class="day-card"><div class="day-num">Days 21–22</div><div class="day-title">minGRU sequential mode</div><div class="day-sub">Port the AMD HIP minGRU to CUDA. Sequential inference kernel. Understand the recurrence.</div><div class="tags"><span class="tag tag-project">project</span><span class="tag tag-kernel">kernel</span></div></div>
+    <div class="day-card"><div class="day-num">Days 23–25</div><div class="day-title">minGRU parallel scan (training mode)</div><div class="day-sub">h_t = a_t⊙h_{t-1} + b_t as a parallel scan. Your Brent-Kung knowledge pays off here.</div><div class="tags"><span class="tag tag-project">project</span><span class="tag tag-kernel">kernel</span><span class="tag tag-theory">theory</span></div></div>
+    <div class="day-card"><div class="day-num">Days 26–27</div><div class="day-title">minLSTM — sequential + parallel</div><div class="day-sub">Gate normalization step. More complex scan coefficients. Same pattern, new challenge.</div><div class="tags"><span class="tag tag-project">project</span><span class="tag tag-kernel">kernel</span></div></div>
+    <div class="day-card"><div class="day-num">Days 28–30</div><div class="day-title">Benchmark + README write-up</div><div class="day-sub">Sequential vs parallel speedup. Sequence length scaling. Proper README with numbers and graphs.</div><div class="tags"><span class="tag tag-ship">ship it</span><span class="tag tag-optim">optimize</span></div></div>
+    <div class="day-card"><div class="day-num">Days 31–32</div><div class="day-title">Flash Attention v2 — causal + MQA</div><div class="day-sub">Causal mask in the tiled loop. Multi-query variant. Profile vs v1.</div><div class="tags"><span class="tag tag-kernel">kernel</span><span class="tag tag-optim">optimize</span></div></div>
+    <div class="day-card"><div class="day-num">Days 33–34</div><div class="day-title">CUDA streams + async transfers</div><div class="day-sub">Overlap compute and data transfer. cudaMemcpyAsync. Pipeline your model.</div><div class="tags"><span class="tag tag-theory">theory</span><span class="tag tag-optim">optimize</span></div></div>
+    <div class="day-card"><div class="day-num">Days 35–36</div><div class="day-title">FP16 matmul + half2 ops</div><div class="day-sub">Half precision arithmetic. half2 for 2x throughput. GTX 1650 supports this.</div><div class="tags"><span class="tag tag-kernel">kernel</span><span class="tag tag-optim">optimize</span></div></div>
+    <div class="day-card"><div class="day-num">Days 37–38</div><div class="day-title">CUTLASS intro</div><div class="day-sub">Use CUTLASS GEMM. Understand the abstraction. Compare to your hand-rolled version.</div><div class="tags"><span class="tag tag-theory">theory</span><span class="tag tag-optim">optimize</span></div></div>
+    <div class="day-card"><div class="day-num">Days 39–40</div><div class="day-title">Project 1 complete + blog post</div><div class="day-sub">Polished repo. Benchmark table. Blog post: "I ported minGRU+minLSTM to CUDA from scratch."</div><div class="tags"><span class="tag tag-ship">ship it</span><span class="tag tag-project">project</span></div></div>
+  </div>
+</div>
+
+<div class="milestone"><strong>Milestone 2 — Day 40</strong>Project 1 shipped. Blog post live. minRNN in CUDA with parallel scan, benchmarks, and writeup. Portfolio item #1.</div>
+
+<!-- Phase 3 -->
+<div class="phase p3">
+  <div class="phase-header">
+    <span class="phase-badge">Phase 3</span>
+    <span class="phase-title">Advanced kernels + architecture depth</span>
+    <span class="phase-days">Days 41–65</span>
+  </div>
+  <div class="days-grid">
+    <div class="day-card"><div class="day-num">Days 41–43</div><div class="day-title">Project 2 kickoff — tiny GPT-2 inference</div><div class="day-sub">No PyTorch. Pure CUDA: embedding, attention, FFN, layernorm, softmax. Load weights from file.</div><div class="tags"><span class="tag tag-project">project</span><span class="tag tag-kernel">kernel</span></div></div>
+    <div class="day-card"><div class="day-num">Days 44–46</div><div class="day-title">Fused kernels for transformer</div><div class="day-sub">Fuse layernorm + matmul. Fuse matmul + gelu. Measure memory bandwidth saved.</div><div class="tags"><span class="tag tag-optim">optimize</span><span class="tag tag-kernel">kernel</span></div></div>
+    <div class="day-card"><div class="day-num">Days 47–48</div><div class="day-title">KV cache</div><div class="day-sub">KV cache for autoregressive decoding. How memory management changes with growing context.</div><div class="tags"><span class="tag tag-kernel">kernel</span><span class="tag tag-theory">theory</span></div></div>
+    <div class="day-card"><div class="day-num">Days 49–50</div><div class="day-title">Quantization — INT8 / FP8</div><div class="day-sub">Per-tensor and per-channel quant. Write a quantized matmul. Why lower precision is faster.</div><div class="tags"><span class="tag tag-kernel">kernel</span><span class="tag tag-theory">theory</span></div></div>
+    <div class="day-card"><div class="day-num">Days 51–52</div><div class="day-title">Speculative decoding — theory + impl</div><div class="day-sub">Draft model + verifier pattern. Implement a toy version in your inference engine.</div><div class="tags"><span class="tag tag-theory">theory</span><span class="tag tag-kernel">kernel</span></div></div>
+    <div class="day-card"><div class="day-num">Days 53–55</div><div class="day-title">Flash Attention backward pass</div><div class="day-sub">Recomputation trick. Gradient through online softmax. 3 days because this is genuinely hard.</div><div class="tags"><span class="tag tag-kernel">kernel</span><span class="tag tag-theory">theory</span></div></div>
+    <div class="day-card"><div class="day-num">Days 56–57</div><div class="day-title">Triton — first kernels</div><div class="day-sub">Write matmul and softmax in Triton. What it gives you vs raw CUDA. Use Colab.</div><div class="tags"><span class="tag tag-theory">theory</span><span class="tag tag-kernel">kernel</span></div></div>
+    <div class="day-card"><div class="day-num">Days 58–59</div><div class="day-title">LoRA kernel — fused low-rank update</div><div class="day-sub">Fuse A×B with W during matmul. Relevant to every fine-tuning job out there.</div><div class="tags"><span class="tag tag-kernel">kernel</span></div></div>
+    <div class="day-card"><div class="day-num">Days 60–62</div><div class="day-title">Project 2 complete — benchmark + ship</div><div class="day-sub">Get tokens/sec numbers. Compare against llama.cpp baseline. Write the README with benchmark table.</div><div class="tags"><span class="tag tag-ship">ship it</span><span class="tag tag-project">project</span></div></div>
+    <div class="day-card"><div class="day-num">Days 63–65</div><div class="day-title">Paper reading sprint + Project 3 plan</div><div class="day-sub">Read FA1, FA2, "Were RNNs All We Needed?" carefully. Pick your next project.</div><div class="tags"><span class="tag tag-theory">theory</span><span class="tag tag-project">project</span></div></div>
+  </div>
+</div>
+
+<div class="milestone"><strong>Milestone 3 — Day 65</strong>Project 2 shipped — tiny GPT-2 inference in pure CUDA with KV cache, quantization, and benchmark numbers. 2 solid portfolio items.</div>
+
+<!-- Phase 4 -->
+<div class="phase p4">
+  <div class="phase-header">
+    <span class="phase-badge">Phase 4</span>
+    <span class="phase-title">Project 3 — your signature project</span>
+    <span class="phase-days">Days 66–85</span>
+  </div>
+  <div class="days-grid">
+    <div class="day-card"><div class="day-num">Days 66–70</div><div class="day-title">Project 3 — design + first kernels</div><div class="day-sub">Options: Flash Attention for RNNs, chunk-wise parallel scan, custom CUDA extension for PyTorch, or sliding window attention.</div><div class="tags"><span class="tag tag-project">project</span><span class="tag tag-kernel">kernel</span></div></div>
+    <div class="day-card"><div class="day-num">Days 71–75</div><div class="day-title">Project 3 — core implementation</div><div class="day-sub">Build the kernel. Profile aggressively. At least one optimization pass that improves perf by ≥2x.</div><div class="tags"><span class="tag tag-project">project</span><span class="tag tag-optim">optimize</span></div></div>
+    <div class="day-card"><div class="day-num">Days 76–78</div><div class="day-title">Profiling deep dive — roofline model</div><div class="day-sub">Nsight Compute. Roofline analysis. Occupancy calculator. Know what's bottlenecking your kernels.</div><div class="tags"><span class="tag tag-optim">optimize</span><span class="tag tag-theory">theory</span></div></div>
+    <div class="day-card"><div class="day-num">Days 79–81</div><div class="day-title">Multi-GPU on Colab — NCCL basics</div><div class="day-sub">NCCL all-reduce. How data parallelism works at the kernel level. A100 on Colab.</div><div class="tags"><span class="tag tag-theory">theory</span><span class="tag tag-kernel">kernel</span></div></div>
+    <div class="day-card"><div class="day-num">Days 82–85</div><div class="day-title">Project 3 complete + blog post #2</div><div class="day-sub">Polish, document, benchmark. Write a technical blog post. This is your signature piece.</div><div class="tags"><span class="tag tag-ship">ship it</span><span class="tag tag-project">project</span></div></div>
+  </div>
+</div>
+
+<div class="milestone"><strong>Milestone 4 — Day 85</strong>3 shipped projects. 2 blog posts. Active GitHub with daily commits. Time to apply seriously.</div>
+
+<!-- Phase 5 -->
+<div class="phase p5">
+  <div class="phase-header">
+    <span class="phase-badge">Phase 5</span>
+    <span class="phase-title">Apply, interview prep + keep building</span>
+    <span class="phase-days">Days 86–100</span>
+  </div>
+  <div class="days-grid">
+    <div class="day-card"><div class="day-num">Days 86–88</div><div class="day-title">Targeting — where to apply</div><div class="day-sub">ML infra teams, inference startups (Together AI, Groq, Fireworks, Modal), research labs. Target by skill match.</div><div class="tags"><span class="tag tag-ship">ship it</span></div></div>
+    <div class="day-card"><div class="day-num">Days 89–91</div><div class="day-title">Interview prep — GPU systems questions</div><div class="day-sub">"Write a faster kernel than naive attention." "Explain memory coalescing." "Optimize this for H100." Practice these.</div><div class="tags"><span class="tag tag-theory">theory</span></div></div>
+    <div class="day-card"><div class="day-num">Days 92–94</div><div class="day-title">Cold outreach — engineers, not recruiters</div><div class="day-sub">DM people working on the exact problems you've been solving. Show your work. Not a resume blast.</div><div class="tags"><span class="tag tag-ship">ship it</span></div></div>
+    <div class="day-card"><div class="day-num">Days 95–97</div><div class="day-title">LeetGPU — climb the leaderboard</div><div class="day-sub">Pick 3-5 LeetGPU problems. Optimize hard. Top-10 on even one problem is a conversation starter.</div><div class="tags"><span class="tag tag-optim">optimize</span><span class="tag tag-ship">ship it</span></div></div>
+    <div class="day-card"><div class="day-num">Days 98–100</div><div class="day-title">Day 100 — retrospective + keep shipping</div><div class="day-sub">Write the Day 100 README post. Reflect publicly. The job hunt continues but the foundation is done.</div><div class="tags"><span class="tag tag-ship">ship it</span><span class="tag tag-project">project</span></div></div>
+  </div>
+</div>
+
+</body>
+</html>
