@@ -15,7 +15,7 @@ learning GPU programming from scratch. CUDA, one kernel at a time.
 
 | day | topic | kernel / file | notes |
 |-----|-------|---------------|-------|
-| 1 | | | |
+| 1 | Introduction, Thread Indexing | vecAdd.cu | Learned about thread indexing and gpu architecture, read documentation |
 | 2 | | | |
 | 3 | | | |
 | 4 | | | |

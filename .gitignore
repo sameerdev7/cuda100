@@ -1,0 +1,20 @@
+# executables
+*.out
+*.exe
+conv
+a.out
+
+# object files
+*.o
+
+# shared libs
+*.so
+
+# CUDA
+*.ptx
+*.cubin
+
+# misc
+build/
+
+.vscode/
