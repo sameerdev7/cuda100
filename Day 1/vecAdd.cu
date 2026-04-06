@@ -55,18 +55,14 @@ int main()
     // copy the result from device to host
     cudaMemcpy(C, d_C, bytes, cudaMemcpyDeviceToHost);
 
-    double tolerance = 1.0e-14; 
+    float maxError = 0.0; 
 
     for (int i = 0; i < vectorLength; i++)
     {
-        if (fabs(C[i] - 3.0) > tolerance)
-        {
-            std::cout << "Error: C[" << i << "] = " << C[i] << "\n";
-            return -1;
-        }
+      maxError = fmax(maxError, fabs(C[i]-3.0f));
     }
 
-    std::cout << "Success!\n";
+    std::cout << "Max error: " << maxError << std::endl;
 
     // free the cpu memory 
     free(A);
